@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case à cocher</title>
+  <script>
+    function caseAcocher() {
+      var info = document.getElementById("info");
+      var estCochee = '';
+      if ((document.getElementById("caseCochee1").checked) && (document.getElementById("caseCochee2").checked)){
+        estCochee = '1 et 2';
+      }
+      else if (document.getElementById("caseCochee1").checked){
+        estCochee = '1';
+      }
+      else if (document.getElementById("caseCochee2").checked){
+        estCochee = '2';
+      }
+      const valeur = { caseCochee: estCochee };
+      fetch('http://127.0.0.1:5000', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ estCochee: valeur })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Réponse reçue :', data);
+        info.style.display = "block";
+        document.getElementById("case").innerText = estCochee;
+      })
+      .catch((error) => {
+        console.error('Erreur :', error);
+      });
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="affichage">
+    <h2>Case à cocher</h2>
+    <form id="formulaire">
+      Case à cocher Numéro 1 <input type="checkbox" id="caseCochee1">
+      Case à cocher Numéro 2 <input type="checkbox" id="caseCochee2">
+      <br>
+      <div id="info" class="hide">
+        <p id="result">La(Les) case(s) cochée(s) est(sont) numéro(s) :<span id="case">0</span></p>
+    </div>
+    <button type="button" onclick="caseAcocher()">Valider</button>
+    </form>
+  </div>
+</body>
+</html>
